@@ -1,5 +1,8 @@
 async function nameSearch (name) {
   const response = await fetch(`https://restcountries.eu/rest/v2/name/${name}`)
+  if (!response.ok) {
+    throw new Error(`Response not ok, status ${response.status}.`)
+  }
   return response.json()
 }
 
@@ -29,11 +32,6 @@ function onSubmit(event) {
   $search.reset();
 
   nameSearch(value)
-    .then(response => {
-      if (!response.ok) {
-        throw new Error(`Response not ok, status ${response.status}.`)
-      }
-    })
     .then(countries => countries && countries.map(country => country.name))
     .then(UL)
     .then(renderResults)
